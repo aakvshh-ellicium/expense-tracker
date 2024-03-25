@@ -1,68 +1,77 @@
 const formEl = document.getElementById('inputForm')
 const expenseEl = document.querySelectorAll('button')
-let net = 0;
-let earnings = 0;
-let expenses = 0;
 
-const state = {
-    earnings: earnings,
-    expenses: expenses,
-    net: net,
+
+let state = {
+    earnings: 0,
+    expenses: 0,
+    net: 0,
     transactions: []
     
+}
+const savedState = JSON.parse(localStorage.getItem("state"))
+if (savedState) {
+    state = savedState; 
+    readtransactions();
+}
+
+console.log(state)
+
+function setLocalStorage(){
+    localStorage.setItem("state", JSON.stringify(state));
+}
+
+function updateState() {
+    state.earnings = 0;
+    state.expenses = 0;
+    state.net = 0;
+    state.transactions.forEach(transaction => {
+        if (transaction.type == 'credit'){
+            state.earnings += Number(transaction.amount)
+        } else {
+            state.expenses += Number(transaction.amount)
+        }
+    })
+
+    state.net = state.earnings - state.expenses;
 }
 
 function readtransactions(){
     const displayTransactions = document.querySelector('.cards');
-    let transactions = document.createElement('div').innerHTML;
-    
-    indexToFetch = state.transactions.length - 1;
-    
-    let text = state.transactions[indexToFetch].description;
-    let category = state.transactions[indexToFetch].category;
-    let amount = state.transactions[indexToFetch].amount;
-    let date = state.transactions[indexToFetch].date;
+    displayTransactions.innerHTML = ""
+    let net = 0;
 
-    
+    state.transactions.forEach(transaction => {
+        const {description, category, amount, date, type} = transaction;
+        let sign = type === "credit" ? "+" : "-";
+
+        displayTransactions.insertAdjacentHTML('beforeend',
+        `   <div class="card">
+                <div class="cardHeader">
+                    <p id="displayText">${description}</p>
+                    <div id="category">
+                        <i class="fa-solid fa-square" id="expenseIcon"></i>
+                        <p class="categoryName">${category}</p><br>                                            
+                    </div>
+                </div>
+                <p id="displayAmount">${sign} ${amount}</p>
+                <p class="categoryName">${date}</p>
+            </div>`
+        )
+        
+        type === "credit" ? net += Number(amount) : net -= Number(amount);
+    })
+
+    setLocalStorage();
+
     const netEarnings = document.getElementById('netEarnings')
-
-
-
-    let sign = state.transactions[indexToFetch].type == "credit" ? "+" : "-";
-
-    // newTransaction = transactions.innerHTML;
-    transactions += `  <div class="card">
-                                    <div class="cardHeader">
-                                        <p id="displayText">${text}</p>
-                                        <div id="category">
-                                            <i class="fa-solid fa-square" id="expenseIcon"></i>
-                                            <p class="categoryName">${category}</p><br>
-                                            
-                                            
-                                        </div>
-                                    </div>
-                                    <p id="displayAmount">${sign} ${amount}</p>
-                                    <p class="categoryName">${date}</p>
-                                </div>`
-    
-    state.transactions[indexToFetch].type == "credit" ? earnings += Number(amount) : expenses += Number(amount);
-    net = earnings - expenses
-
-    
     netEarnings.innerHTML = `${net} Rs`
-    // console.log(earnings)
-    // console.log(expenses)
-    // console.log(net)
-    // transactions.innerHTML = transactions
-    displayTransactions.insertAdjacentHTML('beforeend',transactions);
-
-
 }
+
 
 const addTransaction = (e) => {
     e.preventDefault();
 
-    
     const formData = new FormData(formEl);
     console.log(e)
 
@@ -71,26 +80,23 @@ const addTransaction = (e) => {
     formData.forEach((value, key) => transactionData[key] = value);
 
     const {description, amount, date, category} = transactionData;
-
     const isEarn = e.submitter.id === "earningsButton" ? "credit" : "debit";
 
     const transaction = {
-        description: description,
-        amount: amount,
-        date: date,
-        category: category,
+        description,
+        amount,
+        date,
+        category,
         type: isEarn
     }
 
     state.transactions.push(transaction)
 
-    console.log(state.transactions)
+    console.log(state)
     
-    
+    updateState();
+    setLocalStorage();
     readtransactions();
-
-    // state.net = net;
-
 }
 
 formEl.addEventListener('submit', addTransaction);
