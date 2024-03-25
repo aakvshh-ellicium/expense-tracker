@@ -4,10 +4,77 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Expansio - Manage your expenses</title>
+    <script src="https://kit.fontawesome.com/498e39f28f.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Hello</h1>
+    <!-- Navbar -->
+    
+    <nav>
+        <div>
+            <p id="logoText">Expansio</p>
+            <ul>
+                <li>Dashboard</li>
+                <li>Analysis</li>
+                <li>Savings</li>
+            </ul>
+        </div>
+        <div>
+            <i class="fa-regular fa-bell" id="bellIcon"></i>
+            <i class="fa-solid fa-user" id="userIcon"></i>
+        </div>
+    </nav>
+
+    <section>
+        <h1>Add Transactions</h1><br>
+
+        <form id="inputForm">
+            <input name="description" class="inputField" id="text" type="text" placeholder="Description" required>
+            <input name="amount" class="inputField" id="amount" type="number" placeholder="Amount" required>
+            <input name="date" class="inputField" type="date" required>
+            <select name="category" class="inputField"id="cars" required>
+                <option value="Bill-Payment">Bill Payment</option>
+                <option value="Loan">Loan</option>
+                <option value="Rent">Rent</option>
+                <option value="Bank-Transfer">Transfer to family/friends</option>
+                <option value="Investment">Investment</option>
+                <option value="Others">Others</option>
+
+            </select>
+            <button type="submit" id="earningsButton">Earnings</button>
+            <button type="submit" id="expenseButton">Expense</button>
+        </form><br><br><br>
+    </section>
+
+    <!-- Dashboard -->
+
+    <section>
+
+        <div id="dashboardContainer">
+            <div>
+                <h2>Dashboard</h2><br><br>
+                <div class="cards">
+                    
+                    
+                </div>
+            </div>
+            <div id="expensesContainer">
+                <h2>Net balance</h2>
+                <p id="netEarnings">0</p>
+
+                <!-- <div id="expenses">
+                    <div id="expense">
+                        <div id="categoryInfo">
+                            <i class="fa-solid fa-square" id="expenseIcon"></i>
+                            <p>Assets</p>
+                        </div>
+                        <div id="totalCategoryExpense">4000</div>
+                    </div>
+                </div> -->
+            </div>
+        </div>
+    </section>
+
 
     <script src="main.js"></script>
 </body>
