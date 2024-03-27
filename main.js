@@ -1,3 +1,4 @@
+
 const formEl = document.getElementById('inputForm')
 const expenseEl = document.querySelectorAll('button')
 
@@ -100,5 +101,8 @@ const addTransaction = (e) => {
 }
 
 formEl.addEventListener('submit', addTransaction);
+
+
+
 
 
