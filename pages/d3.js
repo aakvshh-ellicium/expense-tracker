@@ -30,24 +30,31 @@ for (let date in dateExpData){
 
 console.log(dateExpSum)
 
+
 const svg = d3.select('#analysis')
-    .append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-    .append("g")
-    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+.append("svg")
+.attr("width", width + margin.left + margin.right)
+.attr("height", height + margin.top + margin.bottom)
+.append("g")
+.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+dateExpSum.sort((a, b) => d3.descending(a.sum, b.sum));
 
 const x = d3.scaleLinear()
     .range([0, width])
-    .domain([0, d3.max(dateExpSum, d => d.sum)]); // Use max sum for domain
+    .domain([0, d3.max(dateExpSum, d => d.sum + 25)]); // Use max sum for domain
 
 const y = d3.scaleBand()
     .range([height, 0])
     .padding(0.1)
     .domain(dateExpSum.map(d => d.date)); // Use dates for domain
 
-const xAxis = d3.axisBottom(x);
-const yAxis = d3.axisLeft(y);
+const xAxis = d3.axisBottom(x)
+    .ticks(5)
+    .tickSize(0);
+const yAxis = d3.axisLeft(y)
+    .ticks(5)
+    .tickPadding(10);
 
 svg.selectAll(".bar")
     .data(dateExpSum)
@@ -57,6 +64,8 @@ svg.selectAll(".bar")
     .attr("y", d => y(d.date))
     .attr("height", y.bandwidth())
     .attr("x", 0)
+    .transition()
+    .duration(1750)
     .attr("width", d => x(d.sum))
     .style("fill", 'skyblue');
 
@@ -67,3 +76,23 @@ svg.append("g")
 
 svg.append("g")
     .call(yAxis);
+
+svg.selectAll(".label")
+    .data(dateExpSum)
+    .enter()
+    .append("text")
+    .attr("x", d => x(d.sum) + 5)
+    .attr("y", d => y(d.date) + y.bandwidth() / 2)
+    .attr("dy", ".35em")
+    .style("font-size", "10px")
+    .style("font-weight", "bold")
+    .style("fill", "#333")
+    .text(d => d.sum);
+
+svg.append("text")
+    .attr("transform", "translate(" + width / 2.7 + "," + (height + margin.bottom / 2) + ')')
+    // .style("text-anchor", "middle")
+    .style("font-size", "20px") 
+    .style("fill", "black")
+    .attr("dy", "1em")
+    .text("Total Expenses");   
