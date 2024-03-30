@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Expansio - Manage your expenses</title>
+    <title>Expensio - Manage your expenses</title>
     <script src="https://kit.fontawesome.com/498e39f28f.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="style.css">
 </head>
@@ -12,11 +12,11 @@
     
     <nav>
         <div>
-            <p id="logoText">Expansio</p>
+            <p id="logoText">Expensio</p>
             <ul>
-                <li>Dashboard</li>
+                <a href="/"><li>Dashboard</li></a>
                 <a href="pages/analysis.html"><li>Analysis</li></a>
-                <li>Savings</li>
+                <!-- <li>Savings</li> -->
             </ul>
         </div>
         <div>
@@ -26,13 +26,14 @@
     </nav>
 
     <section>
+        <br>
         <h1>Add Transactions</h1><br>
 
         <form id="inputForm">
             <input name="description" class="inputField" id="text" type="text" placeholder="Description" required>
             <input name="amount" class="inputField" id="amount" type="number" placeholder="Amount" required>
-            <input name="date" class="inputField" type="date" required>
-            <select name="category" class="inputField"id="cars" required>
+            <input name="date" class="inputField" id="date" type="date" required>
+            <select name="category" class="inputField" id="categories" required>
                 <option value="Bill-Payment">Bill Payment</option>
                 <option value="Loan">Loan</option>
                 <option value="Rent">Rent</option>
@@ -41,9 +42,9 @@
                 <option value="Others">Others</option>
 
             </select>
-            <button type="submit" id="earningsButton">Earnings</button>
-            <button type="submit" id="expenseButton">Expense</button>
-        </form><br><br><br>
+            <button type="submit" id="earningsButton">Earnings ✅</button>
+            <button type="submit" id="expenseButton">Expense💀</button>
+        </form><br>
     </section>
 
     <!-- Dashboard -->
@@ -52,7 +53,15 @@
 
         <div id="dashboardContainer">
             <div>
-                <h2>Dashboard</h2><br><br>
+                <div style="display: flex; gap: 1rem; align-items: center; padding-right: 1em;">
+                    <h2>Transaction History</h2><br><br><br>
+                    <select name="category" class="inputField" onchange="sortByCategory(this.value)">
+                        <option value="date-latest">Sort by Date (Latest)</option>
+                        <option value="date-oldest">Sort by Date (Old)</option>
+                        <option value="amount-descending">Sort by Amount (Descending)</option>
+                        <option value="amount-ascending" id="amount">Sort by Amount (Ascending)</option>
+                    </select>
+                </div>
                 <div class="cards">
                     
                     
